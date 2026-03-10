@@ -60,13 +60,13 @@ export function ListItem({
                 <p
                     className={cn(
                         'text-sm truncate transition-all duration-200 tracking-wide',
-                        checked ? 'text-cr-text-muted/50 line-through' : 'text-cr-text/90'
+                        checked ? 'text-cr-text-muted line-through' : 'text-cr-text'
                     )}
                 >
                     {title}
                 </p>
                 {subtitle && (
-                    <p className="font-mono text-[10px] text-cr-text-muted/60 truncate mt-1">{subtitle}</p>
+                    <p className="font-mono text-[10px] text-cr-text-muted truncate mt-1">{subtitle}</p>
                 )}
             </div>
 

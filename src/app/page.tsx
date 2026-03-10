@@ -144,22 +144,22 @@ export default function HomePage() {
       {/* ── Status Strip ─────────────────────────────────── */}
       <Panel className="!p-3">
         <div className="flex flex-wrap items-center gap-x-6 gap-y-2">
-          <div className="font-mono text-xs text-cr-text-secondary">
+          <div className="font-mono text-xs text-cr-text">
             <span className="text-cr-accent">◉</span> {formatDate(now)}
           </div>
-          <div className="font-mono text-xs text-cr-text-muted">
+          <div className="font-mono text-xs text-cr-text-secondary">
             W{getWeekNumber(now)}
           </div>
           {currentFocus && (
             <div className="font-mono text-xs">
-              <span className="text-cr-text-muted">FOCUS:</span>{' '}
+              <span className="text-cr-text-secondary">FOCUS:</span>{' '}
               <span className="text-cr-accent">{currentFocus}</span>
             </div>
           )}
           {todayAnxiety?.score && (
             <Tag label={`Anxiety: ${todayAnxiety.score}/10`} color={todayAnxiety.score > 6 ? '#cf3e3e' : '#cfa63e'} />
           )}
-          <div className="font-mono text-xs text-cr-text-muted ml-auto">
+          <div className="font-mono text-xs text-cr-text-secondary ml-auto">
             {openToday} open · {doneToday} done
           </div>
         </div>
@@ -168,14 +168,14 @@ export default function HomePage() {
       {/* ── Focus editor (inline) ──────────────────────── */}
       <Panel className="!p-3">
         <div className="flex items-center gap-2">
-          <span className="font-mono text-xs text-cr-text-muted shrink-0">FOCUS ▸</span>
+          <span className="font-mono text-xs text-cr-text-secondary shrink-0">FOCUS ▸</span>
           <input
             value={currentFocus}
             onChange={(e) => setCurrentFocus(e.target.value)}
             onBlur={saveFocus}
             onKeyDown={(e) => e.key === 'Enter' && saveFocus()}
             placeholder="What's your current objective?"
-            className="flex-1 bg-transparent text-sm text-cr-text placeholder:text-cr-text-muted/50 outline-none font-mono"
+            className="flex-1 bg-transparent text-sm text-cr-text placeholder:text-cr-text-muted outline-none font-mono"
           />
         </div>
       </Panel>
@@ -185,7 +185,7 @@ export default function HomePage() {
         {/* Left Sidebar: Telemetry & Context */}
         <div className="md:col-span-3 lg:col-span-3 space-y-4">
            {/* Anxiety Mini Panel (System Status) */}
-           <Panel title="System Status" className="border-cr-border/50 bg-transparent">
+           <Panel title="System Status" className="border-cr-border bg-transparent">
              <div className="space-y-4">
               <a
                 href="/calm"
@@ -194,7 +194,7 @@ export default function HomePage() {
                 FOCUS RESET (ESC)
               </a>
                <div className="space-y-1">
-                 <div className="flex justify-between text-[10px] font-mono text-cr-text-muted mb-1">
+                 <div className="flex justify-between text-[10px] font-mono text-cr-text-secondary mb-1">
                    <span>STRESS LEVEL</span>
                    <span>{anxietyScore}/10</span>
                  </div>
@@ -204,7 +204,7 @@ export default function HomePage() {
                    min={1}
                    max={10}
                  />
-                 <Button size="sm" variant="ghost" onClick={saveAnxietyScore} className="w-full text-[10px] h-6 mt-1 opacity-50 hover:opacity-100">
+                 <Button size="sm" variant="ghost" onClick={saveAnxietyScore} className="w-full text-[10px] h-6 mt-1 opacity-80 hover:opacity-100">
                    Update System
                  </Button>
                </div>
@@ -212,7 +212,7 @@ export default function HomePage() {
            </Panel>
 
            {/* Peripheral Context: Week/Month/Quarter Telemetry */}
-           <Panel title="Mission Context" className="border-cr-border/50 bg-transparent">
+           <Panel title="Mission Context" className="border-cr-border bg-transparent">
              <div className="space-y-4">
                {/* Week Progress */}
                <div>
@@ -221,44 +221,44 @@ export default function HomePage() {
                     <span>{weekTasks.filter(t => t.status==='done').length}/{weekTasks.length}</span>
                   </div>
                   <div className="flex items-center gap-1.5">
-                     <div className="h-1 flex-1 bg-cr-bg overflow-hidden rounded-full">
-                        <div className="h-full bg-cr-accent/50 transition-all" style={{ width: `${weekTasks.length === 0 ? 0 : (weekTasks.filter(t => t.status==='done').length / weekTasks.length) * 100}%`}} />
+                     <div className="h-1 flex-1 bg-cr-bg overflow-hidden rounded-full border border-cr-border">
+                        <div className="h-full bg-cr-accent transition-all" style={{ width: `${weekTasks.length === 0 ? 0 : (weekTasks.filter(t => t.status==='done').length / weekTasks.length) * 100}%`}} />
                      </div>
                   </div>
                </div>
 
                 {/* Month Progress */}
                <div>
-                  <div className="flex justify-between text-[10px] font-mono text-cr-text-muted mb-1.5">
+                  <div className="flex justify-between text-[10px] font-mono text-cr-text-secondary mb-1.5">
                     <span>MONTHLY OUTCOMES</span>
                     <span>{monthObjectives.filter(t => t.status==='done').length}/{monthObjectives.length}</span>
                   </div>
                   <div className="flex gap-1">
                      {monthObjectives.length > 0 ? Array.from({ length: Math.max(monthObjectives.length, 3) }).map((_, i) => (
                         <div key={i} className={cn("h-1.5 flex-1 rounded-sm", 
-                           i >= monthObjectives.length ? "bg-cr-bg" : 
-                           monthObjectives[i].status === 'done' ? "bg-cr-accent/60" : "bg-cr-border"
+                           i >= monthObjectives.length ? "bg-cr-bg border border-cr-border" : 
+                           monthObjectives[i].status === 'done' ? "bg-cr-accent" : "bg-cr-border"
                         )} />
                      )) : (
-                        <span className="text-[10px] font-mono text-cr-text-muted/50 italic">No outcomes set</span>
+                        <span className="text-[10px] font-mono text-cr-text-secondary italic">No outcomes set</span>
                      )}
                   </div>
                </div>
 
                 {/* Quarter Progress */}
                <div>
-                  <div className="flex justify-between text-[10px] font-mono text-cr-text-muted mb-1.5">
+                  <div className="flex justify-between text-[10px] font-mono text-cr-text-secondary mb-1.5">
                     <span>QUARTERLY OUTCOMES</span>
                     <span>{quarterObjectives.filter(t => t.status==='done').length}/{quarterObjectives.length}</span>
                   </div>
                    <div className="flex gap-1">
                      {quarterObjectives.length > 0 ? Array.from({ length: Math.max(quarterObjectives.length, 2) }).map((_, i) => (
                         <div key={i} className={cn("h-1.5 flex-1 rounded-sm", 
-                           i >= quarterObjectives.length ? "bg-cr-bg" : 
-                           quarterObjectives[i].status === 'done' ? "bg-cr-accent/40" : "bg-cr-border"
+                           i >= quarterObjectives.length ? "bg-cr-bg border border-cr-border" : 
+                           quarterObjectives[i].status === 'done' ? "bg-cr-accent" : "bg-cr-border"
                         )} />
                      )) : (
-                        <span className="text-[10px] font-mono text-cr-text-muted/50 italic">No outcomes set</span>
+                        <span className="text-[10px] font-mono text-cr-text-secondary italic">No outcomes set</span>
                      )}
                   </div>
                </div>
@@ -268,19 +268,19 @@ export default function HomePage() {
            {/* Not Now Preview */}
           <Panel
             title="Parking Lot"
-            className="border-cr-border/50 bg-transparent"
+            className="border-cr-border bg-transparent"
             headerAction={
-              <a href="/not-now" className="font-mono text-[10px] text-cr-accent/50 hover:text-cr-accent transition-colors">
+              <a href="/not-now" className="font-mono text-[10px] text-cr-accent/80 hover:text-cr-accent transition-colors">
                 View All →
               </a>
             }
           >
             {notNowItems.length === 0 ? (
-              <div className="text-[10px] font-mono text-cr-text-muted/50 italic py-2">Empty</div>
+              <div className="text-[10px] font-mono text-cr-text-muted italic py-2">Empty</div>
             ) : (
               <div className="space-y-1">
                 {notNowItems.slice(0, 3).map((item) => (
-                   <div key={item.id} className="text-[10px] font-mono truncate text-cr-text-secondary/70">
+                   <div key={item.id} className="text-[10px] font-mono truncate text-cr-text-secondary">
                      • {item.title}
                    </div>
                 ))}
@@ -304,7 +304,7 @@ export default function HomePage() {
             </div>
           }
           glow
-          className="h-full border-cr-border bg-cr-panel/40"
+          className="h-full border-cr-border bg-cr-panel/80"
           headerAction={
             <Button size="sm" variant="primary" onClick={() => { setQuickAddScope(activeFlightPath === 'quarter' ? 'today' : activeFlightPath); setShowQuickAdd(true); }} className="h-7 text-xs px-3">
               + Execute [N]
@@ -322,12 +322,12 @@ export default function HomePage() {
                   checked={item.status === 'done'}
                   onToggle={() => toggleCurrentItem(item as any)}
                   onDelete={() => deleteCurrentItem(item.id)}
-                  className="py-3 px-4 bg-cr-panel/60 border border-cr-border/50 hover:border-cr-accent/30 transition-colors"
+                  className="py-3 px-4 bg-cr-panel border border-cr-border hover:border-cr-accent/50 transition-colors"
                 />
               ))}
                {(currentList as any[]).filter(t => t.status === 'done').length > 0 && (
-                <div className="pt-4 mt-4 border-t border-cr-border/30">
-                  <h4 className="font-mono text-[10px] text-cr-text-muted mb-2 px-2 uppercase tracking-widest">Completed</h4>
+                <div className="pt-4 mt-4 border-t border-cr-border/50">
+                  <h4 className="font-mono text-[10px] text-cr-text-secondary mb-2 px-2 uppercase tracking-widest">Completed</h4>
                   {(currentList as any[]).filter(t => t.status === 'done').map((item) => (
                     <ListItem
                       key={item.id}
@@ -335,7 +335,7 @@ export default function HomePage() {
                       checked={item.status === 'done'}
                       onToggle={() => toggleCurrentItem(item as any)}
                       onDelete={() => deleteCurrentItem(item.id)}
-                      className="py-1.5 px-2 opacity-50 hover:opacity-100 transition-opacity"
+                      className="py-1.5 px-2 opacity-80 hover:opacity-100 transition-opacity"
                     />
                   ))}
                 </div>

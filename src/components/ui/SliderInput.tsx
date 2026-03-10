@@ -67,8 +67,8 @@ export function SliderInput({
                     }}
                 />
                 <div className="flex justify-between mt-1 px-1">
-                    <span className="text-[10px] text-cr-text-muted font-mono">{min}</span>
-                    <span className="text-[10px] text-cr-text-muted font-mono">{max}</span>
+                    <span className="text-[10px] text-cr-text-secondary font-mono">{min}</span>
+                    <span className="text-[10px] text-cr-text-secondary font-mono">{max}</span>
                 </div>
             </div>
         </div>

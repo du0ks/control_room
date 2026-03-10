@@ -16,7 +16,7 @@ export function Panel({ children, className, title, headerAction, noPadding, glo
     return (
         <div
             className={cn(
-                'rounded-md bg-cr-panel/30 backdrop-blur-sm',
+                'rounded-md bg-cr-panel/70 backdrop-blur-sm',
                 'transition-all duration-300',
                 !noPadding && 'p-4',
                 className
@@ -25,7 +25,7 @@ export function Panel({ children, className, title, headerAction, noPadding, glo
             {(title || headerAction) && (
                 <div className={cn('flex items-center justify-between', !noPadding && 'mb-3')}>
                     {title && (
-                        <h3 className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-cr-text-muted/70">
+                        <h3 className="font-mono text-[10px] font-medium uppercase tracking-[0.2em] text-cr-text-muted">
                             {title}
                         </h3>
                     )}

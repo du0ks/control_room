@@ -20,7 +20,7 @@ const variantStyles: Record<ButtonVariant, string> = {
     danger:
         'bg-transparent border-cr-danger/30 text-cr-danger hover:bg-cr-danger/10 hover:border-cr-danger/50',
     ghost:
-        'bg-transparent border-transparent text-cr-text-muted hover:bg-cr-panel/30 hover:text-cr-text-secondary',
+        'bg-transparent border-transparent text-cr-text-secondary hover:bg-cr-panel/50 hover:text-cr-text',
     emergency:
         'bg-cr-danger/20 border-cr-danger text-cr-danger hover:bg-cr-danger/30',
 };
