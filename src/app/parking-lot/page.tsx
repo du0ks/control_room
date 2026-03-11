@@ -10,9 +10,9 @@ import { EmptyState } from '@/components/ui/EmptyState';
 import { Tag } from '@/components/ui/Tag';
 import { Modal } from '@/components/ui/Modal';
 import { useToast } from '@/components/ui/Toast';
-import { notNowRepository } from '@/lib/repositories/NotNowRepository';
+import { parkingLotRepository } from '@/lib/repositories/ParkingLotRepository';
 import { taskRepository } from '@/lib/repositories/TaskRepository';
-import type { NotNowItem, TaskScope } from '@/lib/models';
+import type { ParkingLotItem, TaskScope } from '@/lib/models';
 import { cn } from '@/lib/utils';
 
 const VIEW_TABS = [
@@ -21,13 +21,13 @@ const VIEW_TABS = [
     { id: 'review', label: '⟳ Review' },
 ];
 
-export default function NotNowPage() {
+export default function ParkingLotPage() {
     const { showToast } = useToast();
     const [view, setView] = useState('active');
-    const [items, setItems] = useState<NotNowItem[]>([]);
+    const [items, setItems] = useState<ParkingLotItem[]>([]);
     const [search, setSearch] = useState('');
     const [showAdd, setShowAdd] = useState(false);
-    const [editItem, setEditItem] = useState<NotNowItem | null>(null);
+    const [editItem, setEditItem] = useState<ParkingLotItem | null>(null);
     const [title, setTitle] = useState('');
     const [notes, setNotes] = useState('');
     const [tags, setTags] = useState('');
@@ -35,11 +35,11 @@ export default function NotNowPage() {
     const [moveScope, setMoveScope] = useState<TaskScope>('today');
 
     const loadItems = useCallback(async () => {
-        let data: NotNowItem[];
+        let data: ParkingLotItem[];
         if (view === 'archived') {
-            data = await notNowRepository.getArchived();
+            data = await parkingLotRepository.getArchived();
         } else {
-            data = await notNowRepository.getActive();
+            data = await parkingLotRepository.getActive();
         }
         setItems(data);
     }, [view]);
@@ -51,7 +51,7 @@ export default function NotNowPage() {
     // Listen for search shortcut
     useEffect(() => {
         const handler = () => {
-            const input = document.getElementById('not-now-search');
+            const input = document.getElementById('parking-lot-search');
             input?.focus();
         };
         window.addEventListener('cr:search', handler);
@@ -60,7 +60,7 @@ export default function NotNowPage() {
 
     const handleAdd = async () => {
         if (!title.trim()) return;
-        await notNowRepository.create({
+        await parkingLotRepository.create({
             title: title.trim(),
             notes: notes || undefined,
             tags: tags.split(',').map(t => t.trim()).filter(Boolean),
@@ -74,7 +74,7 @@ export default function NotNowPage() {
 
     const handleUpdate = async () => {
         if (!editItem || !title.trim()) return;
-        await notNowRepository.update(editItem.id, {
+        await parkingLotRepository.update(editItem.id, {
             title: title.trim(),
             notes: notes || undefined,
             tags: tags.split(',').map(t => t.trim()).filter(Boolean),
@@ -92,37 +92,37 @@ export default function NotNowPage() {
     };
 
     const archiveItem = async (id: string) => {
-        await notNowRepository.update(id, { archived: true });
+        await parkingLotRepository.update(id, { archived: true });
         showToast('Archived');
         loadItems();
     };
 
     const unarchiveItem = async (id: string) => {
-        await notNowRepository.update(id, { archived: false });
+        await parkingLotRepository.update(id, { archived: false });
         showToast('Restored');
         loadItems();
     };
 
     const deleteItem = async (id: string) => {
-        await notNowRepository.delete(id);
+        await parkingLotRepository.delete(id);
         showToast('Deleted');
         loadItems();
     };
 
-    const moveToPlans = async (item: NotNowItem) => {
+    const moveToPlans = async (item: ParkingLotItem) => {
         await taskRepository.create({
             title: item.title,
             scope: moveScope,
             status: 'open',
             notes: item.notes,
         });
-        await notNowRepository.update(item.id, { archived: true });
+        await parkingLotRepository.update(item.id, { archived: true });
         showToast(`Moved to ${moveScope}`);
         loadItems();
         setReviewIndex(prev => Math.min(prev, items.length - 2));
     };
 
-    const openEdit = (item: NotNowItem) => {
+    const openEdit = (item: ParkingLotItem) => {
         setEditItem(item);
         setTitle(item.title);
         setNotes(item.notes || '');
@@ -147,7 +147,7 @@ export default function NotNowPage() {
     return (
         <div className="space-y-4">
             <div className="flex items-center justify-between">
-                <h1 className="font-mono text-lg font-bold text-cr-text uppercase tracking-wider">Not Now</h1>
+                <h1 className="font-mono text-lg font-bold text-cr-text uppercase tracking-wider">Parking Lot</h1>
                 <Button variant="primary" onClick={() => { setShowAdd(true); resetForm(); }}>
                     + Add
                 </Button>
@@ -159,7 +159,7 @@ export default function NotNowPage() {
                 <>
                     {/* Search */}
                     <Input
-                        id="not-now-search"
+                        id="parking-lot-search"
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         placeholder="Search items or tags... (press / to focus)"
@@ -177,7 +177,7 @@ export default function NotNowPage() {
                                     const daysOld = getDaysOld(item.updatedAt || item.createdAt);
                                     const isStale = daysOld > 30;
                                     const isDecaying = daysOld > 60;
-                                    
+
                                     return (
                                         <div key={item.id} className="relative group/item">
                                             {isStale && view === 'active' && (
@@ -293,8 +293,7 @@ export default function NotNowPage() {
                 </Panel>
             )}
 
-            {/* Add Modal */}
-            <Modal isOpen={showAdd} onClose={() => setShowAdd(false)} title="Add to Not Now">
+            <Modal isOpen={showAdd} onClose={() => setShowAdd(false)} title="Add to Parking Lot">
                 <div className="space-y-4">
                     <Input label="Title" value={title} onChange={(e) => setTitle(e.target.value)} placeholder="What to park?" autoFocus />
                     <Textarea label="Notes" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="Details..." />

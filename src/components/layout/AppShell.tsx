@@ -45,8 +45,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     if (!ready) {
         return (
             <div className="flex h-screen items-center justify-center">
-                <div className="font-mono text-sm text-cr-accent animate-pulse">
-                    ⬡ Initializing Control Room...
+                <div className="flex flex-col items-center gap-4">
+                    <h1 className="font-mono text-sm font-bold tracking-widest text-cr-accent animate-pulse uppercase">
+                        ⬡ Initializing Cockpit...
+                    </h1>
                 </div>
             </div>
         );

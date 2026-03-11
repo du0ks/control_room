@@ -4,7 +4,7 @@ import type {
     Objective,
     AnxietyLog,
     CalmMessage,
-    NotNowItem,
+    ParkingLotItem,
     Category,
     UserSettings,
     CalendarEvent,
@@ -16,7 +16,7 @@ export class ControlRoomDB extends Dexie {
     objectives!: EntityTable<Objective, 'id'>;
     anxietyLogs!: EntityTable<AnxietyLog, 'id'>;
     calmMessages!: EntityTable<CalmMessage, 'id'>;
-    notNowItems!: EntityTable<NotNowItem, 'id'>;
+    parkingLotItems!: EntityTable<ParkingLotItem, 'id'>;
     categories!: EntityTable<Category, 'id'>;
     settings!: EntityTable<UserSettings, 'id'>;
     calendarEvents!: EntityTable<CalendarEvent, 'id'>;
@@ -29,7 +29,7 @@ export class ControlRoomDB extends Dexie {
             objectives: 'id, scope, status, updatedAt',
             anxietyLogs: 'id, date, updatedAt',
             calmMessages: 'id, pinned, updatedAt',
-            notNowItems: 'id, archived, *tags, updatedAt',
+            parkingLotItems: 'id, archived, *tags, updatedAt',
             categories: 'id, name',
             settings: 'id',
         });

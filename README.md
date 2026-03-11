@@ -1,4 +1,4 @@
-# Control Room
+# Cockpit
 
 A Matrix-inspired, offline-first PWA for daily/weekly/monthly/quarterly planning + anxiety "Calm Mode". Built with Next.js, TypeScript, Tailwind CSS, and Dexie (IndexedDB).
 
@@ -15,17 +15,17 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 | Section | Description |
 |---------|-------------|
-| **Control Room** | Dashboard with today/week/month/quarter panels, focus tracker, anxiety mini panel |
+| **Cockpit** | Dashboard with today/week/month/quarter panels, focus tracker, anxiety mini panel |
 | **Plans** | Week/Month/Quarter views — manage focus items and outcomes |
 | **Actions** | Quick capture + daily execution list with scope filters |
-| **Not Now** | Parking lot with tags, search, archive, and review mode |
+| **Parking Lot** | Parking lot with tags, search, archive, and review mode |
 | **Calm Mode** | Emergency overlay with calming messages, anxiety score tracking |
 | **Settings** | Scanlines, reduce motion, keyboard shortcuts |
 
 ## Keyboard Shortcuts
 
 - `n` — New task (opens quick add modal)
-- `/` — Focus search in Not Now
+- `/` — Focus search in Parking Lot
 - `Esc` — Close modal or exit Emergency Mode
 - `→` / `Space` — Next message in Emergency Mode
 - `←` — Previous message in Emergency Mode
@@ -86,7 +86,7 @@ npm start
 
 - **Task** — scoped to today/week/month/quarter/someday
 - **Objective** — week/month/quarter outcomes
-- **NotNowItem** — parking lot with tags
+- **ParkingLotItem** — parking lot with tags
 - **AnxietyLog** — daily score + thought/body/notes
 - **CalmMessage** — calming messages with pin + tags
 - **Category** — task categories with icons

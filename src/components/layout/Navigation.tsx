@@ -6,12 +6,12 @@ import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 
 const NAV_ITEMS = [
-    { href: '/', label: 'Control Room', icon: '⬡', shortLabel: 'Home' },
+    { href: '/', label: 'Cockpit', icon: '⬡', shortLabel: 'Home' },
     { href: '/plans', label: 'Plans', icon: '◈', shortLabel: 'Plans' },
     { href: '/actions', label: 'Actions', icon: '▹', shortLabel: 'Actions' },
     { href: '/schedule', label: 'Schedule', icon: '◫', shortLabel: 'Schedule' },
     { href: '/stats', label: 'Stats', icon: '◆', shortLabel: 'Stats' },
-    { href: '/not-now', label: 'Not Now', icon: '◇', shortLabel: 'Not Now' },
+    { href: '/parking-lot', label: 'Parking Lot', icon: '◇', shortLabel: 'Parking Lot' },
     { href: '/calm', label: 'Calm Mode', icon: '○', shortLabel: 'Calm' },
 ];
 
@@ -23,7 +23,7 @@ export function Sidebar() {
             {/* Logo */}
             <div className="p-5 border-b border-cr-border">
                 <h1 className="font-mono text-sm font-bold tracking-widest text-cr-accent uppercase">
-                    ⬡ Control Room
+                    ⬡ Cockpit
                 </h1>
                 <p className="font-mono text-[10px] text-cr-text-muted mt-1 tracking-wider">
                     COMMAND CENTER v1.0

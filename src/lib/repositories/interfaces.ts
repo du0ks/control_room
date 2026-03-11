@@ -3,7 +3,7 @@ import type {
     Objective,
     AnxietyLog,
     CalmMessage,
-    NotNowItem,
+    ParkingLotItem,
     Category,
     UserSettings,
     CalendarEvent,
@@ -51,12 +51,12 @@ export interface ICalmRepository {
     delete(id: string): Promise<void>;
 }
 
-export interface INotNowRepository {
-    getAll(): Promise<NotNowItem[]>;
-    getActive(): Promise<NotNowItem[]>;
-    getArchived(): Promise<NotNowItem[]>;
-    create(item: Omit<NotNowItem, 'id' | 'createdAt' | 'updatedAt'>): Promise<NotNowItem>;
-    update(id: string, data: Partial<NotNowItem>): Promise<void>;
+export interface IParkingLotRepository {
+    getAll(): Promise<ParkingLotItem[]>;
+    getActive(): Promise<ParkingLotItem[]>;
+    getArchived(): Promise<ParkingLotItem[]>;
+    create(item: Omit<ParkingLotItem, 'id' | 'createdAt' | 'updatedAt'>): Promise<ParkingLotItem>;
+    update(id: string, data: Partial<ParkingLotItem>): Promise<void>;
     delete(id: string): Promise<void>;
 }
 

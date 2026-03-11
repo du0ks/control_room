@@ -161,7 +161,7 @@ export default function SettingsPage() {
                         <kbd className="rounded border border-cr-border bg-cr-bg px-2 py-0.5 font-mono text-xs text-cr-text">N</kbd>
                     </div>
                     <div className="flex items-center justify-between py-1">
-                        <span className="text-sm text-cr-text-secondary">Search Not Now</span>
+                        <span className="text-sm text-cr-text-secondary">Search Parking Lot</span>
                         <kbd className="rounded border border-cr-border bg-cr-bg px-2 py-0.5 font-mono text-xs text-cr-text">/</kbd>
                     </div>
                     <div className="flex items-center justify-between py-1">
@@ -196,7 +196,7 @@ export default function SettingsPage() {
 
             <Panel title="About" glow>
                 <div className="space-y-2 text-xs text-cr-text-muted">
-                    <p><span className="text-cr-accent">Control Room</span> v1.0.0</p>
+                    <p><span className="text-cr-accent">Cockpit</span> v1.0.0</p>
                     <p>A Matrix-inspired offline-first planning dashboard.</p>
                     <p className="font-mono text-[10px] text-cr-text-muted/50">
                         Future: Firebase integration, cloud sync, auth

@@ -1,4 +1,4 @@
-// ── Control Room Data Models ──────────────────────────────
+// ── Cockpit Data Models ──────────────────────────────
 
 export type TaskScope = 'today' | 'week' | 'month' | 'quarter' | 'someday';
 export type TaskStatus = 'open' | 'done' | 'archived';
@@ -67,7 +67,7 @@ export interface CalmMessage {
   updatedAt: number;
 }
 
-export interface NotNowItem {
+export interface ParkingLotItem {
   id: string;
   title: string;
   notes?: string;

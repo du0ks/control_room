@@ -13,10 +13,10 @@ import { useToast } from '@/components/ui/Toast';
 import { Tag } from '@/components/ui/Tag';
 import { taskRepository } from '@/lib/repositories/TaskRepository';
 import { objectiveRepository } from '@/lib/repositories/ObjectiveRepository';
-import { notNowRepository } from '@/lib/repositories/NotNowRepository';
+import { parkingLotRepository } from '@/lib/repositories/ParkingLotRepository';
 import { anxietyRepository } from '@/lib/repositories/AnxietyRepository';
 import { settingsRepository } from '@/lib/repositories/SettingsRepository';
-import type { Task, Objective, NotNowItem, AnxietyLog, TaskScope } from '@/lib/models';
+import type { Task, Objective, ParkingLotItem, AnxietyLog, TaskScope } from '@/lib/models';
 import { formatDate, getWeekNumber, todayString, cn } from '@/lib/utils';
 
 export default function HomePage() {
@@ -25,7 +25,7 @@ export default function HomePage() {
   const [weekTasks, setWeekTasks] = useState<Task[]>([]);
   const [monthObjectives, setMonthObjectives] = useState<Objective[]>([]);
   const [quarterObjectives, setQuarterObjectives] = useState<Objective[]>([]);
-  const [notNowItems, setNotNowItems] = useState<NotNowItem[]>([]);
+  const [parkingLotItems, setParkingLotItems] = useState<ParkingLotItem[]>([]);
   const [todayAnxiety, setTodayAnxiety] = useState<AnxietyLog | null>(null);
   const [currentFocus, setCurrentFocus] = useState('');
   const [newTaskTitle, setNewTaskTitle] = useState('');
@@ -35,19 +35,19 @@ export default function HomePage() {
   const [activeFlightPath, setActiveFlightPath] = useState<TaskScope | 'quarter'>('today');
 
   const loadData = useCallback(async () => {
-    const [today, week, monthObj, quarterObj, notNow, settings] = await Promise.all([
+    const [today, week, monthObj, quarterObj, parkingLotItemsData, settings] = await Promise.all([
       taskRepository.getByScope('today'),
       taskRepository.getByScope('week'),
       objectiveRepository.getByScope('month'),
       objectiveRepository.getByScope('quarter'),
-      notNowRepository.getActive(),
+      parkingLotRepository.getActive(),
       settingsRepository.get(),
     ]);
     setTodayTasks(today.filter(t => t.status !== 'archived'));
     setWeekTasks(week.filter(t => t.status !== 'archived'));
     setMonthObjectives(monthObj.filter(o => o.status !== 'archived'));
     setQuarterObjectives(quarterObj.filter(o => o.status !== 'archived'));
-    setNotNowItems(notNow.slice(0, 5));
+    setParkingLotItems(parkingLotItemsData.slice(0, 5));
     setCurrentFocus(settings.currentFocus || '');
 
     const anxLog = await anxietyRepository.getByDate(todayString());
@@ -184,105 +184,105 @@ export default function HomePage() {
       <div className="grid gap-6 md:grid-cols-12">
         {/* Left Sidebar: Telemetry & Context */}
         <div className="md:col-span-3 lg:col-span-3 space-y-4">
-           {/* Anxiety Mini Panel (System Status) */}
-           <Panel title="System Status" className="border-cr-border bg-transparent">
-             <div className="space-y-4">
+          {/* Anxiety Mini Panel (System Status) */}
+          <Panel title="System Status" className="border-cr-border bg-transparent">
+            <div className="space-y-4">
               <a
                 href="/calm"
                 className="block w-full rounded-md bg-cr-panel border border-cr-border py-2 text-center font-mono text-xs font-bold text-cr-text-secondary hover:bg-cr-panel-hover hover:text-cr-text transition-all duration-200"
               >
                 FOCUS RESET (ESC)
               </a>
-               <div className="space-y-1">
-                 <div className="flex justify-between text-[10px] font-mono text-cr-text-secondary mb-1">
-                   <span>STRESS LEVEL</span>
-                   <span>{anxietyScore}/10</span>
-                 </div>
-                 <SliderInput
-                   value={anxietyScore}
-                   onChange={setAnxietyScore}
-                   min={1}
-                   max={10}
-                 />
-                 <Button size="sm" variant="ghost" onClick={saveAnxietyScore} className="w-full text-[10px] h-6 mt-1 opacity-80 hover:opacity-100">
-                   Update System
-                 </Button>
-               </div>
-             </div>
-           </Panel>
+              <div className="space-y-1">
+                <div className="flex justify-between text-[10px] font-mono text-cr-text-secondary mb-1">
+                  <span>STRESS LEVEL</span>
+                  <span>{anxietyScore}/10</span>
+                </div>
+                <SliderInput
+                  value={anxietyScore}
+                  onChange={setAnxietyScore}
+                  min={1}
+                  max={10}
+                />
+                <Button size="sm" variant="ghost" onClick={saveAnxietyScore} className="w-full text-[10px] h-6 mt-1 opacity-80 hover:opacity-100">
+                  Update System
+                </Button>
+              </div>
+            </div>
+          </Panel>
 
-           {/* Peripheral Context: Week/Month/Quarter Telemetry */}
-           <Panel title="Mission Context" className="border-cr-border bg-transparent">
-             <div className="space-y-4">
-               {/* Week Progress */}
-               <div>
-                  <div className="flex justify-between text-[10px] font-mono text-cr-text-muted mb-1.5 break-all">
-                    <span>WEEKLY FOCUS</span>
-                    <span>{weekTasks.filter(t => t.status==='done').length}/{weekTasks.length}</span>
+          {/* Peripheral Context: Week/Month/Quarter Telemetry */}
+          <Panel title="Mission Context" className="border-cr-border bg-transparent">
+            <div className="space-y-4">
+              {/* Week Progress */}
+              <div>
+                <div className="flex justify-between text-[10px] font-mono text-cr-text-muted mb-1.5 break-all">
+                  <span>WEEKLY FOCUS</span>
+                  <span>{weekTasks.filter(t => t.status === 'done').length}/{weekTasks.length}</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <div className="h-1 flex-1 bg-cr-bg overflow-hidden rounded-full border border-cr-border">
+                    <div className="h-full bg-cr-accent transition-all" style={{ width: `${weekTasks.length === 0 ? 0 : (weekTasks.filter(t => t.status === 'done').length / weekTasks.length) * 100}%` }} />
                   </div>
-                  <div className="flex items-center gap-1.5">
-                     <div className="h-1 flex-1 bg-cr-bg overflow-hidden rounded-full border border-cr-border">
-                        <div className="h-full bg-cr-accent transition-all" style={{ width: `${weekTasks.length === 0 ? 0 : (weekTasks.filter(t => t.status==='done').length / weekTasks.length) * 100}%`}} />
-                     </div>
-                  </div>
-               </div>
+                </div>
+              </div>
 
-                {/* Month Progress */}
-               <div>
-                  <div className="flex justify-between text-[10px] font-mono text-cr-text-secondary mb-1.5">
-                    <span>MONTHLY OUTCOMES</span>
-                    <span>{monthObjectives.filter(t => t.status==='done').length}/{monthObjectives.length}</span>
-                  </div>
-                  <div className="flex gap-1">
-                     {monthObjectives.length > 0 ? Array.from({ length: Math.max(monthObjectives.length, 3) }).map((_, i) => (
-                        <div key={i} className={cn("h-1.5 flex-1 rounded-sm", 
-                           i >= monthObjectives.length ? "bg-cr-bg border border-cr-border" : 
-                           monthObjectives[i].status === 'done' ? "bg-cr-accent" : "bg-cr-border"
-                        )} />
-                     )) : (
-                        <span className="text-[10px] font-mono text-cr-text-secondary italic">No outcomes set</span>
-                     )}
-                  </div>
-               </div>
+              {/* Month Progress */}
+              <div>
+                <div className="flex justify-between text-[10px] font-mono text-cr-text-secondary mb-1.5">
+                  <span>MONTHLY OUTCOMES</span>
+                  <span>{monthObjectives.filter(t => t.status === 'done').length}/{monthObjectives.length}</span>
+                </div>
+                <div className="flex gap-1">
+                  {monthObjectives.length > 0 ? Array.from({ length: Math.max(monthObjectives.length, 3) }).map((_, i) => (
+                    <div key={i} className={cn("h-1.5 flex-1 rounded-sm",
+                      i >= monthObjectives.length ? "bg-cr-bg border border-cr-border" :
+                        monthObjectives[i].status === 'done' ? "bg-cr-accent" : "bg-cr-border"
+                    )} />
+                  )) : (
+                    <span className="text-[10px] font-mono text-cr-text-secondary italic">No outcomes set</span>
+                  )}
+                </div>
+              </div>
 
-                {/* Quarter Progress */}
-               <div>
-                  <div className="flex justify-between text-[10px] font-mono text-cr-text-secondary mb-1.5">
-                    <span>QUARTERLY OUTCOMES</span>
-                    <span>{quarterObjectives.filter(t => t.status==='done').length}/{quarterObjectives.length}</span>
-                  </div>
-                   <div className="flex gap-1">
-                     {quarterObjectives.length > 0 ? Array.from({ length: Math.max(quarterObjectives.length, 2) }).map((_, i) => (
-                        <div key={i} className={cn("h-1.5 flex-1 rounded-sm", 
-                           i >= quarterObjectives.length ? "bg-cr-bg border border-cr-border" : 
-                           quarterObjectives[i].status === 'done' ? "bg-cr-accent" : "bg-cr-border"
-                        )} />
-                     )) : (
-                        <span className="text-[10px] font-mono text-cr-text-secondary italic">No outcomes set</span>
-                     )}
-                  </div>
-               </div>
-             </div>
-           </Panel>
-           
-           {/* Not Now Preview */}
+              {/* Quarter Progress */}
+              <div>
+                <div className="flex justify-between text-[10px] font-mono text-cr-text-secondary mb-1.5">
+                  <span>QUARTERLY OUTCOMES</span>
+                  <span>{quarterObjectives.filter(t => t.status === 'done').length}/{quarterObjectives.length}</span>
+                </div>
+                <div className="flex gap-1">
+                  {quarterObjectives.length > 0 ? Array.from({ length: Math.max(quarterObjectives.length, 2) }).map((_, i) => (
+                    <div key={i} className={cn("h-1.5 flex-1 rounded-sm",
+                      i >= quarterObjectives.length ? "bg-cr-bg border border-cr-border" :
+                        quarterObjectives[i].status === 'done' ? "bg-cr-accent" : "bg-cr-border"
+                    )} />
+                  )) : (
+                    <span className="text-[10px] font-mono text-cr-text-secondary italic">No outcomes set</span>
+                  )}
+                </div>
+              </div>
+            </div>
+          </Panel>
+
+          {/* Parking Lot Preview */}
           <Panel
             title="Parking Lot"
             className="border-cr-border bg-transparent"
             headerAction={
-              <a href="/not-now" className="font-mono text-[10px] text-cr-accent/80 hover:text-cr-accent transition-colors">
+              <a href="/parking-lot" className="font-mono text-[10px] text-cr-accent/80 hover:text-cr-accent transition-colors">
                 View All →
               </a>
             }
           >
-            {notNowItems.length === 0 ? (
+            {parkingLotItems.length === 0 ? (
               <div className="text-[10px] font-mono text-cr-text-muted italic py-2">Empty</div>
             ) : (
               <div className="space-y-1">
-                {notNowItems.slice(0, 3).map((item) => (
-                   <div key={item.id} className="text-[10px] font-mono truncate text-cr-text-secondary">
-                     • {item.title}
-                   </div>
+                {parkingLotItems.slice(0, 3).map((item) => (
+                  <div key={item.id} className="text-[10px] font-mono truncate text-cr-text-secondary">
+                    • {item.title}
+                  </div>
                 ))}
               </div>
             )}
@@ -291,58 +291,58 @@ export default function HomePage() {
 
         {/* Center Console: Immediate Actions */}
         <div className="md:col-span-9 lg:col-span-9">
-        <Panel
-          title={
-            <div className="flex items-center gap-2 -ml-1">
-              <span>ACTIVE FLIGHT PATH:</span>
-              <button 
-                onClick={cycleFlightPath}
-                className="text-[10px] text-cr-accent bg-cr-accent/10 hover:bg-cr-accent/20 px-2 py-0.5 rounded border border-cr-accent/30 transition-colors cursor-pointer tracking-[0.2em]"
-              >
-                {activeFlightPath}
-              </button>
-            </div>
-          }
-          glow
-          className="h-full border-cr-border bg-cr-panel/80"
-          headerAction={
-            <Button size="sm" variant="primary" onClick={() => { setQuickAddScope(activeFlightPath === 'quarter' ? 'today' : activeFlightPath); setShowQuickAdd(true); }} className="h-7 text-xs px-3">
-              + Execute [N]
-            </Button>
-          }
-        >
-          {currentList.length === 0 ? (
-            <EmptyState icon="▹" title={`No actions for ${activeFlightPath}`} description={`Press 'n' or click +Add to add a task to ${activeFlightPath}`} />
-          ) : (
-            <div className="space-y-1 mt-4">
-              {(currentList as any[]).filter(t => t.status === 'open').map((item) => (
-                <ListItem
-                  key={item.id}
-                  title={item.title}
-                  checked={item.status === 'done'}
-                  onToggle={() => toggleCurrentItem(item as any)}
-                  onDelete={() => deleteCurrentItem(item.id)}
-                  className="py-3 px-4 bg-cr-panel border border-cr-border hover:border-cr-accent/50 transition-colors"
-                />
-              ))}
-               {(currentList as any[]).filter(t => t.status === 'done').length > 0 && (
-                <div className="pt-4 mt-4 border-t border-cr-border/50">
-                  <h4 className="font-mono text-[10px] text-cr-text-secondary mb-2 px-2 uppercase tracking-widest">Completed</h4>
-                  {(currentList as any[]).filter(t => t.status === 'done').map((item) => (
-                    <ListItem
-                      key={item.id}
-                      title={item.title}
-                      checked={item.status === 'done'}
-                      onToggle={() => toggleCurrentItem(item as any)}
-                      onDelete={() => deleteCurrentItem(item.id)}
-                      className="py-1.5 px-2 opacity-80 hover:opacity-100 transition-opacity"
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
-          )}
-        </Panel>
+          <Panel
+            title={
+              <div className="flex items-center gap-2 -ml-1">
+                <span>ACTIVE FLIGHT PATH:</span>
+                <button
+                  onClick={cycleFlightPath}
+                  className="text-[10px] text-cr-accent bg-cr-accent/10 hover:bg-cr-accent/20 px-2 py-0.5 rounded border border-cr-accent/30 transition-colors cursor-pointer tracking-[0.2em]"
+                >
+                  {activeFlightPath}
+                </button>
+              </div>
+            }
+            glow
+            className="h-full border-cr-border bg-cr-panel/80"
+            headerAction={
+              <Button size="sm" variant="primary" onClick={() => { setQuickAddScope(activeFlightPath === 'quarter' ? 'today' : activeFlightPath); setShowQuickAdd(true); }} className="h-7 text-xs px-3">
+                + Execute [N]
+              </Button>
+            }
+          >
+            {currentList.length === 0 ? (
+              <EmptyState icon="▹" title={`No actions for ${activeFlightPath}`} description={`Press 'n' or click +Add to add a task to ${activeFlightPath}`} />
+            ) : (
+              <div className="space-y-1 mt-4">
+                {(currentList as any[]).filter(t => t.status === 'open').map((item) => (
+                  <ListItem
+                    key={item.id}
+                    title={item.title}
+                    checked={item.status === 'done'}
+                    onToggle={() => toggleCurrentItem(item as any)}
+                    onDelete={() => deleteCurrentItem(item.id)}
+                    className="py-3 px-4 bg-cr-panel border border-cr-border hover:border-cr-accent/50 transition-colors"
+                  />
+                ))}
+                {(currentList as any[]).filter(t => t.status === 'done').length > 0 && (
+                  <div className="pt-4 mt-4 border-t border-cr-border/50">
+                    <h4 className="font-mono text-[10px] text-cr-text-secondary mb-2 px-2 uppercase tracking-widest">Completed</h4>
+                    {(currentList as any[]).filter(t => t.status === 'done').map((item) => (
+                      <ListItem
+                        key={item.id}
+                        title={item.title}
+                        checked={item.status === 'done'}
+                        onToggle={() => toggleCurrentItem(item as any)}
+                        onDelete={() => deleteCurrentItem(item.id)}
+                        className="py-1.5 px-2 opacity-80 hover:opacity-100 transition-opacity"
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+          </Panel>
         </div>
       </div>
 

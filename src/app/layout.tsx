@@ -3,13 +3,13 @@ import './globals.css';
 import { ClientLayout } from './client-layout';
 
 export const metadata: Metadata = {
-  title: 'Control Room',
+  title: 'Cockpit',
   description: 'Matrix-inspired planning dashboard — command your day, week, month, and quarter.',
   manifest: '/manifest.json',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'black-translucent',
-    title: 'Control Room',
+    title: 'Cockpit',
   },
 };
 
