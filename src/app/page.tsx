@@ -17,7 +17,7 @@ import { parkingLotRepository } from '@/lib/repositories/ParkingLotRepository';
 import { anxietyRepository } from '@/lib/repositories/AnxietyRepository';
 import { settingsRepository } from '@/lib/repositories/SettingsRepository';
 import type { Task, Objective, ParkingLotItem, AnxietyLog, TaskScope } from '@/lib/models';
-import { formatDate, getWeekNumber, todayString, cn, getAnxietyColor } from '@/lib/utils';
+import { formatDate, getWeekNumber, todayString, cn, getAnxietyColor, formatDueDate } from '@/lib/utils';
 
 export default function HomePage() {
   const { showToast } = useToast();
@@ -29,6 +29,7 @@ export default function HomePage() {
   const [todayAnxiety, setTodayAnxiety] = useState<AnxietyLog | null>(null);
   const [currentFocus, setCurrentFocus] = useState('');
   const [newTaskTitle, setNewTaskTitle] = useState('');
+  const [newTaskDate, setNewTaskDate] = useState('');
   const [showQuickAdd, setShowQuickAdd] = useState(false);
   const [quickAddScope, setQuickAddScope] = useState<TaskScope>('today');
   const [anxietyScore, setAnxietyScore] = useState(5);
@@ -74,8 +75,10 @@ export default function HomePage() {
       title: newTaskTitle.trim(),
       scope: quickAddScope,
       status: 'open',
+      dueDate: newTaskDate || undefined,
     });
     setNewTaskTitle('');
+    setNewTaskDate('');
     setShowQuickAdd(false);
     showToast('Task added');
     loadData();
@@ -327,6 +330,7 @@ export default function HomePage() {
                     checked={item.status === 'done'}
                     onToggle={() => toggleCurrentItem(item as any)}
                     onDelete={() => deleteCurrentItem(item.id)}
+                    trailing={item.dueDate ? <Tag label={formatDueDate(item.dueDate, activeFlightPath as any) || 'today'} size="md" /> : undefined}
                     className="py-3 px-4 bg-cr-panel border border-cr-border hover:border-cr-accent/50 transition-colors"
                   />
                 ))}
@@ -362,6 +366,15 @@ export default function HomePage() {
             autoFocus
             onKeyDown={(e) => e.key === 'Enter' && handleQuickAdd()}
           />
+          <div>
+            <label className="block font-mono text-[10px] text-cr-text-secondary uppercase tracking-wider mb-1.5">Due Date (optional)</label>
+            <input
+              type="date"
+              value={newTaskDate}
+              onChange={(e) => setNewTaskDate(e.target.value)}
+              className="w-full rounded-md border border-cr-border bg-cr-panel px-3 py-2 text-sm text-cr-text font-mono outline-none focus:border-cr-accent transition-colors"
+            />
+          </div>
           <Select
             label="Scope"
             value={quickAddScope}

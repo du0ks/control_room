@@ -45,3 +45,19 @@ export function getAnxietyColor(score: number): string {
     if (score <= 6) return '#cfa63e'; // Yellow
     return '#cf3e3e'; // Red
 }
+
+export function formatDueDate(dateStr: string, view: 'today' | 'week' | 'month' | 'quarter'): string {
+    const d = new Date(dateStr + 'T00:00:00');
+    switch (view) {
+        case 'today':
+            return '';
+        case 'week':
+            return d.toLocaleDateString('en-GB', { weekday: 'long' });
+        case 'month':
+            return d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+        case 'quarter':
+            return d.toLocaleDateString('en-GB', { month: 'long' });
+        default:
+            return '';
+    }
+}

@@ -33,6 +33,13 @@ export class DexieTaskRepository implements ITaskRepository {
         return db.tasks.where('status').equals(status).reverse().sortBy('updatedAt');
     }
 
+    async getByDateRange(startDate: string, endDate: string): Promise<Task[]> {
+        return db.tasks
+            .where('dueDate')
+            .between(startDate, endDate, true, true)
+            .sortBy('dueDate');
+    }
+
     async getById(id: string): Promise<Task | undefined> {
         return db.tasks.get(id);
     }

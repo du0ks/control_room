@@ -12,6 +12,13 @@ export class DexieObjectiveRepository implements IObjectiveRepository {
         return db.objectives.where('scope').equals(scope).reverse().sortBy('updatedAt');
     }
 
+    async getByDateRange(startDate: string, endDate: string): Promise<Objective[]> {
+        return db.objectives
+            .where('dueDate')
+            .between(startDate, endDate, true, true)
+            .sortBy('dueDate');
+    }
+
     async getById(id: string): Promise<Objective | undefined> {
         return db.objectives.get(id);
     }

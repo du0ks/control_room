@@ -20,6 +20,7 @@ export interface ITaskRepository {
     getByScope(scope: TaskScope): Promise<Task[]>;
     getByScopeAndStatus(scope: TaskScope, status: TaskStatus): Promise<Task[]>;
     getByStatus(status: TaskStatus): Promise<Task[]>;
+    getByDateRange(startDate: string, endDate: string): Promise<Task[]>;
     getById(id: string): Promise<Task | undefined>;
     create(task: Omit<Task, 'id' | 'createdAt' | 'updatedAt'>): Promise<Task>;
     update(id: string, data: Partial<Task>): Promise<void>;
@@ -29,6 +30,7 @@ export interface ITaskRepository {
 export interface IObjectiveRepository {
     getAll(): Promise<Objective[]>;
     getByScope(scope: string): Promise<Objective[]>;
+    getByDateRange(startDate: string, endDate: string): Promise<Objective[]>;
     getById(id: string): Promise<Objective | undefined>;
     create(obj: Omit<Objective, 'id' | 'createdAt' | 'updatedAt'>): Promise<Objective>;
     update(id: string, data: Partial<Objective>): Promise<void>;

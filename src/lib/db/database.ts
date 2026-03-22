@@ -39,6 +39,9 @@ export class ControlRoomDB extends Dexie {
         this.version(3).stores({
             weeklyTargets: 'id, eventType, updatedAt',
         });
+        this.version(4).stores({
+            objectives: 'id, scope, status, dueDate, updatedAt',
+        });
     }
 }
 

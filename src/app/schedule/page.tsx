@@ -10,7 +10,9 @@ import { DayView } from '@/components/calendar/DayView';
 import { EventFormModal } from '@/components/calendar/EventFormModal';
 import { useToast } from '@/components/ui/Toast';
 import { calendarEventRepository } from '@/lib/repositories/CalendarEventRepository';
-import type { CalendarEvent } from '@/lib/models';
+import { taskRepository } from '@/lib/repositories/TaskRepository';
+import { objectiveRepository } from '@/lib/repositories/ObjectiveRepository';
+import type { CalendarEvent, Task, Objective } from '@/lib/models';
 
 type ViewMode = 'month' | 'week' | 'day';
 
@@ -47,6 +49,7 @@ export default function SchedulePage() {
     const { showToast } = useToast();
     const [view, setView] = useState<ViewMode>('month');
     const [events, setEvents] = useState<CalendarEvent[]>([]);
+    const [deadlines, setDeadlines] = useState<(Task | Objective)[]>([]);
 
     // Navigation state
     const today = new Date();
@@ -80,6 +83,13 @@ export default function SchedulePage() {
 
         const data = await calendarEventRepository.getByDateRange(start, end);
         setEvents(data);
+
+        // Load tasks/objectives with due dates in this range
+        const [dueTasks, dueObjectives] = await Promise.all([
+            taskRepository.getByDateRange(start, end),
+            objectiveRepository.getByDateRange(start, end),
+        ]);
+        setDeadlines([...dueTasks, ...dueObjectives].filter(d => d.status !== 'archived'));
     }, [view, currentYear, currentMonth, currentWeekStart, currentDay]);
 
     useEffect(() => {
@@ -261,6 +271,7 @@ export default function SchedulePage() {
                     <DayView
                         date={currentDay}
                         events={events}
+                        deadlines={deadlines.filter(d => (d as any).dueDate === currentDay)}
                         onEventClick={openEditEvent}
                         onAddClick={() => openNewEvent(currentDay)}
                     />

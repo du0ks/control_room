@@ -38,6 +38,7 @@ export interface Objective {
   scope: ObjectiveScope;
   title: string;
   notes?: string;
+  dueDate?: string;        // 'YYYY-MM-DD'
   startDate?: string;
   endDate?: string;
   status: TaskStatus;

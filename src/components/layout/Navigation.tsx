@@ -7,8 +7,7 @@ import { cn } from '@/lib/utils';
 
 const NAV_ITEMS = [
     { href: '/', label: 'Cockpit', icon: '⬡', shortLabel: 'Home' },
-    { href: '/plans', label: 'Plans', icon: '◈', shortLabel: 'Plans' },
-    { href: '/actions', label: 'Actions', icon: '▹', shortLabel: 'Actions' },
+    { href: '/mission', label: 'Mission', icon: '◈', shortLabel: 'Mission' },
     { href: '/schedule', label: 'Schedule', icon: '◫', shortLabel: 'Schedule' },
     { href: '/stats', label: 'Stats', icon: '◆', shortLabel: 'Stats' },
     { href: '/parking-lot', label: 'Parking Lot', icon: '◇', shortLabel: 'Parking Lot' },
